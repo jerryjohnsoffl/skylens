@@ -9,7 +9,7 @@ const WeatherPage = () => {
                 {/* Add location and details for phone ratio */}
                 {/* Start here and remove these comments after completion*/}
             </div>
-            <div className="container flex flex-col md:flex-row justify-center rounded-3xl md:rounded-4xl items-center w-11/12 sm:w-3/4 h-[548px] bg-sh-white">
+            <div className="container flex flex-col md:flex-row justify-center rounded-3xl md:rounded-4xl items-center w-11/12 md:w-3/4 h-[548px] bg-sh-white">
                 {/* Both phone and desktop */}
                 <div className="w-full h-auto md:h-full md:w-3/5">
                     {/* highlights and loc */}
