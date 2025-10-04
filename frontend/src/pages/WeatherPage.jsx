@@ -1,10 +1,17 @@
 import React from 'react'
+import ChanceOfRain from '../components/ChanceOfRain'
 
 const WeatherPage = () => {
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-[#52C7E8] to-[#96D9EC] flex justify-center items-center">
-        <div className="container flex justify-center items-center w-4/5 h-4/5 bg-white">
-            Hello
+    <div className="w-full min-h-screen bg-gradient-to-b from-[#52C7E8] to-[#96D9EC] pt-12">
+        <div className="h-full w-full flex flex-col justify-center items-center">
+            <div className="container w-11/12 h-44 bg-sh-white mb-8 rounded-3xl sm:hidden">
+                {/* Add location and details for phone ratio */}
+            </div>
+            <div className="container flex justify-center rounded-3xl md:rounded-4xl items-center w-11/12 sm:w-3/4 h-[548px] bg-sh-white">
+                {/* Both phone and desktop */}
+            </div>
+            <button className="my-4 py-3 px-10 h-14 w-2xs font-medium text-t-black rounded-full bg-sh-white">View past 7 days</button>
         </div>
     </div>
   )
