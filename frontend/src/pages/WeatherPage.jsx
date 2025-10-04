@@ -14,13 +14,13 @@ const WeatherPage = () => {
             </div>
 
             {/* Main Container */}
-            <div className="container flex flex-col md:flex-row justify-center rounded-3xl md:rounded-4xl items-start gap-6 w-11/12 bg-sh-white p-6">
+            <div className="container flex flex-col md:flex-row justify-center rounded-3xl md:rounded-4xl items-start gap-6 w-11/12 max-w-6xl bg-sh-white p-6">
                 
                 {/* Left Section - 60% width on desktop */}
                 <div className="w-full md:w-[60%] flex flex-col gap-6">
                     
                     {/* Top Row - Location and Best Day */}
-                    <div className="flex flex-col md:flex-row gap-6">
+                    <div className="flex justify-center flex-col md:flex-row gap-3">
                         {/* Location - Desktop only */}
                         <div className="hidden md:block md:w-1/2">
                             <Location />
@@ -42,7 +42,7 @@ const WeatherPage = () => {
                                 {/* UV Index */}
                                 <div className="mb-6">
                                     <p className="text-sm text-gray-600 mb-3">UV Index</p>
-                                    <div className="w-full h-2 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-600"></div>
+                                    <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-600 via-yellow-400 via-orange-500 via-red-600 to-pink-600"></div>
                                 </div>
                                 
                                 {/* Humidity */}
@@ -91,13 +91,13 @@ const WeatherPage = () => {
                 </div>
 
                 {/* Right Section - 40% width on desktop */}
-                <div className="w-full md:w-[40%] flex flex-col gap-6">
+                <div className="w-full md:w-[40%] flex flex-col items-center gap-4">
                     
                     {/* Chance of Rain */}
-                    <div className="w-full h-1/2">
+                    <div className="w-full flex justify-center items-center h-1/2">
                         <ChanceOfRain />
                     </div>
-                    <div className="w-full h-1/2">
+                    <div className="w-full flex justify-center items-center h-1/2">
                         <Suggestion />
                     </div>
 
