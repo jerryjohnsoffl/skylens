@@ -6,7 +6,7 @@ export default function ChanceOfRain() {
   const timePeriods = ['03 am', '06 am', '09 am', '12 pm', '03 pm', '06 pm', '09 pm', '12 am'];
   
   return (
-    <div className="bg-gray-100 bg-opacity-80 backdrop-blur-sm rounded-3xl p-8 shadow-md max-w-xl w-full">
+    <div className="bg-l-white shadow-[0_0_4px_2px_rgba(0,0,0,0.1)] backdrop-blur-sm rounded-3xl p-8 max-w-xl w-full">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-left">
         Chance of Rain
       </h2>
