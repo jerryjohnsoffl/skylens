@@ -29,6 +29,7 @@ const WeatherPage = () => {
                                 {/* uv index */}
                             </div>
                             <button className="sm:hidden">Show more</button>
+                            {/* till here, and call me */}
                         </div>
                         <div className="w-full">
                             {/* data */}
