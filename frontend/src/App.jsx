@@ -5,7 +5,8 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-
+  const num = [1,2,3,4,5,6,7,8]
+  num.map((i)=> console.log(i))
   return (
     <>
       
