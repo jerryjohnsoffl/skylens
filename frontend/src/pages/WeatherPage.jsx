@@ -32,7 +32,7 @@ const WeatherPage = () => {
                             {/* highlights */}
                             <div className="w-full h-3/4">
                                 {/* uv index */}
-                                uv index
+                                
                             </div>
                             <button className="md:hidden">Show more</button>
                             {/* till here, and call me */}
