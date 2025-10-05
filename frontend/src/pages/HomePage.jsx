@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const HomePage = () => {
   return (
@@ -11,7 +12,10 @@ const HomePage = () => {
                 <div className="h-1/2 flex justify-center items-center">
                     <form action="">
                         <label htmlFor=""></label>
-                        <button className="bg-blue-700 h-12 w-2xs text-white font-medium text-xl rounded-full">Check Weather</button>
+                        <Link to="/weather">
+                            <button className="bg-blue-700 h-12 w-2xs text-white font-medium text-xl rounded-full">Check Weather</button>
+                        </Link>
+                        
                     </form>
                 </div>
             </div>
