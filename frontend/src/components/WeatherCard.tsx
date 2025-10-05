@@ -1,4 +1,5 @@
 import { Cloud, CloudRain, CloudSnow, Wind, Sun, Moon, CloudDrizzle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { WeatherData } from '../types/weather';
 
 interface WeatherCardProps {
@@ -6,6 +7,30 @@ interface WeatherCardProps {
 }
 
 export default function WeatherCard({ weather }: WeatherCardProps) {
+  const [localTime, setLocalTime] = useState<string>('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const tz = weather.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      try {
+        const now = new Date();
+        const str = now.toLocaleTimeString('en-US', {
+          timeZone: tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
+        setLocalTime(str);
+      } catch {
+        setLocalTime(new Date().toLocaleTimeString());
+      }
+    };
+
+    updateTime();
+    const id = setInterval(updateTime, 1000);
+    return () => clearInterval(id);
+  }, [weather.timeZone]);
+
   const getWeatherIcon = (code: number) => {
     if (code === 0) return <Moon className="w-16 h-16 text-gray-100" />;
     if (code === 1 || code === 2) return <Sun className="w-16 h-16 text-yellow-400" />;
@@ -28,16 +53,7 @@ export default function WeatherCard({ weather }: WeatherCardProps) {
             </svg>
             <div>
               <p className="font-semibold text-lg">{weather.location}, {weather.country}</p>
-              <p className="text-sm opacity-80">
-                {(() => {
-                  const tz = weather.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
-                  try {
-                    return new Date().toLocaleString(undefined, { timeZone: tz, weekday: 'long', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true });
-                  } catch {
-                    return new Date().toLocaleString(undefined, { weekday: 'long', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true });
-                  }
-                })()}
-              </p>
+              <p className="text-sm opacity-80">{weather.date} • {localTime}</p>
             </div>
           </div>
         </div>

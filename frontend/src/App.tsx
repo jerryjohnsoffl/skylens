@@ -104,7 +104,7 @@ function App() {
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
                 Skylens
               </h1>
-              <p className="text-white/80 mt-2">{localNowString}</p>
+              <p className="text-white/80 mt-2">{weather ? weather.date : localNowString}</p>
             </div>
             <button
               onClick={() => setIsModalOpen(true)}

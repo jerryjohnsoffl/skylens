@@ -26,11 +26,11 @@ export const getWeatherType = (code: number): string => {
   return 'cloudy';
 };
 
-export const fetchWeather = async (location: string, date?: string): Promise<WeatherData> => {
+export const fetchWeather = async (location: string, date?: string, signal?: AbortSignal): Promise<WeatherData> => {
   const params = new URLSearchParams({ city: location, days: '7' });
   if (date) params.set('date', date);
   const url = `${API_BASE}/api/weather/enhanced?${params.toString()}`;
-  const response = await fetch(url);
+  const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(`Backend error ${response.status}`);
   }
@@ -149,8 +149,15 @@ export const fetchWeather = async (location: string, date?: string): Promise<Wea
     precipitation: todayPrecip,
     rainChance,
     date: (() => {
-      const base = selected.date ? new Date(selected.date) : new Date();
-      return base.toLocaleDateString('en-US', { weekday: 'long', day: '2-digit', month: 'short' });
+      // Always reflect user-selected date if provided, and format in the location's timezone when available
+      const baseStr = requestedYmd || (selected.date ? normalizeToYmd(selected) : '');
+      const base = baseStr ? new Date(baseStr) : new Date();
+      const tz = (data && data.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      try {
+        return base.toLocaleDateString('en-US', { timeZone: tz, weekday: 'long', day: '2-digit', month: 'short' });
+      } catch {
+        return base.toLocaleDateString('en-US', { weekday: 'long', day: '2-digit', month: 'short' });
+      }
     })(),
     weatherCode: todayCode,
     sunrise: sunriseStr,
