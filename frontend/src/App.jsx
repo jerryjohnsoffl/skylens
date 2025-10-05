@@ -23,7 +23,7 @@ function App() {
         <HomePage />
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/skylens/weather' element={<WeatherPage />} />
+          <Route path='/weather' element={<WeatherPage />} />
         </Routes>
       </div> 
     </>
