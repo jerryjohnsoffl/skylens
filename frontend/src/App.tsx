@@ -109,7 +109,7 @@ function App() {
           <header className="flex items-center justify-between mb-12 animate-slide-down">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
-                Skylens
+                Sky lens
               </h1>
               <p className="text-white/80 mt-2">{weather ? weather.date : localNowString}</p>
             </div>
