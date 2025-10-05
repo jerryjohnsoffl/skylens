@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Custom Weather API Tester
+Command-line tool for testing with custom location and date
+Usage: python test_custom.py <city> [date] [days]
+"""
 
 import requests
 import json
@@ -138,6 +144,10 @@ def main():
     test_enhanced_api(city, days)
     
     print("\n" + "=" * 60)
+    
+    # Test basic weather
+    print("2. Testing Basic Weather...")
+    test_basic_weather(city, date)
     
     print("\n" + "=" * 60)
     print("Testing completed!")

@@ -276,46 +276,76 @@ class EnhancedWeatherService:
         return processed_days
     
     def compare_with_historical(self, live_data, historical_data):
-        """Compare live forecast with historical NASA data"""
-        if not live_data or not historical_data:
-            return None
-        
+        """Compare live forecast with historical NASA data and always return useful insights.
+        If historical data is missing, fall back to insights derived from the live forecast window."""
         insights = []
-        
-        # Get today's live data
-        today_live = live_data[0] if live_data else None
-        if not today_live:
+
+        if not live_data:
             return insights
-        
-        # Get historical average for comparison
-        historical_avg = self.calculate_historical_average(historical_data)
-        if not historical_avg:
-            return insights
-        
-        # Temperature comparison
-        temp_diff = today_live['temperature']['avg'] - historical_avg['temperature']['avg']
-        if abs(temp_diff) > 2:
-            if temp_diff > 0:
-                insights.append(f"Today's temperature is {temp_diff:.1f}°C above the historical average")
-            else:
-                insights.append(f"Today's temperature is {abs(temp_diff):.1f}°C below the historical average")
-        
-        # Precipitation comparison
-        precip_diff = today_live['precipitation'] - historical_avg['precipitation']
-        if abs(precip_diff) > 1:
-            if precip_diff > 0:
-                insights.append(f"Expected precipitation is {precip_diff:.1f}mm above historical average")
-            else:
-                insights.append(f"Expected precipitation is {abs(precip_diff):.1f}mm below historical average")
-        
-        # Humidity comparison
-        humidity_diff = today_live['humidity'] - historical_avg['humidity']
-        if abs(humidity_diff) > 10:
-            if humidity_diff > 0:
-                insights.append(f"Humidity is {humidity_diff:.1f}% above historical average")
-            else:
-                insights.append(f"Humidity is {abs(humidity_diff):.1f}% below historical average")
-        
+
+        today_live = live_data[0]
+
+        # If we have historical data, compute comparisons
+        if historical_data:
+            historical_avg = self.calculate_historical_average(historical_data)
+            if historical_avg:
+                temp_diff = today_live['temperature']['avg'] - historical_avg['temperature']['avg']
+                precip_diff = today_live['precipitation'] - historical_avg['precipitation']
+                humidity_diff = today_live['humidity'] - historical_avg['humidity']
+
+                # Always include baseline comparisons (rounded to 1 decimal)
+                insights.append(
+                    f"Temperature today vs {len(historical_data)}-day historical avg: {temp_diff:+.1f}°C"
+                )
+                insights.append(
+                    f"Precipitation today vs historical avg: {precip_diff:+.1f}mm"
+                )
+                insights.append(
+                    f"Humidity today vs historical avg: {humidity_diff:+.1f}%"
+                )
+
+                # Highlight notable deviations
+                if abs(temp_diff) > 2:
+                    insights.append(
+                        ("Significantly warmer" if temp_diff > 0 else "Significantly cooler") +
+                        f" than average by {abs(temp_diff):.1f}°C"
+                    )
+                if abs(precip_diff) > 1:
+                    insights.append(
+                        ("Notably wetter" if precip_diff > 0 else "Notably drier") +
+                        f" than average by {abs(precip_diff):.1f}mm"
+                    )
+                if abs(humidity_diff) > 10:
+                    insights.append(
+                        ("Much more humid" if humidity_diff > 0 else "Much less humid") +
+                        f" than average by {abs(humidity_diff):.1f}%"
+                    )
+
+                return insights
+
+        # Fallback: derive insights from the live forecast window when historical is unavailable
+        try:
+            temps = [d['temperature']['avg'] for d in live_data if 'temperature' in d]
+            precs = [d.get('precipitation', 0) for d in live_data]
+            winds = [d.get('wind_speed', 0) for d in live_data]
+
+            if temps:
+                insights.append(
+                    f"Forecast temperature range this week: {min(temps):.1f}°C to {max(temps):.1f}°C"
+                )
+            if precs:
+                total_prec = sum(precs)
+                insights.append(
+                    f"Total expected precipitation over the period: {total_prec:.1f}mm"
+                )
+            if winds:
+                insights.append(
+                    f"Peak wind speed expected: {max(winds)*3.6:.0f} km/h"
+                )
+        except Exception:
+            # Keep insights empty if anything unexpected happens
+            pass
+
         return insights
     
     def calculate_historical_average(self, historical_data):
@@ -380,8 +410,8 @@ def get_weather():
             return jsonify({'error': 'City parameter is required'}), 400
         
         if not date:
-            # Default to a historical date with reliable data
-            date = '2024-01-15'
+            # Default to today
+            date = datetime.now().strftime('%Y-%m-%d')
         
         # Validate date format
         try:
@@ -445,15 +475,16 @@ def get_forecast():
         if not coords:
             return jsonify({'error': f'Could not find coordinates for city: {city}'}), 404
         
-        # Get forecast for next 7 days (use a historical date range for testing)
-        start_date = '2024-01-15'
-        end_date = datetime.now().strftime('%Y-%m-%d')
+        # Get forecast-like historical slice from the past 7 days up to today
+        end_date = datetime.now()
+        start_date = (end_date - timedelta(days=6)).strftime('%Y-%m-%d')
+        end_date_str = end_date.strftime('%Y-%m-%d')
         
         nasa_data = weather_service.get_nasa_historical_data(
             coords['latitude'], 
             coords['longitude'], 
             start_date, 
-            end_date
+            end_date_str
         )
         
         if not nasa_data:
@@ -488,6 +519,7 @@ def get_enhanced_weather():
     try:
         city = request.args.get('city')
         days = int(request.args.get('days', 7))  # Default to 7 days
+        requested_date = request.args.get('date')  # Optional date to anchor historical window
         
         if not city:
             return jsonify({'error': 'City parameter is required'}), 400
@@ -507,22 +539,52 @@ def get_enhanced_weather():
         if not live_data:
             return jsonify({'error': 'Could not fetch live weather data'}), 500
         
-        # Step 3: Get historical NASA data for comparison
-        # Use the same date range from previous years
-        current_year = datetime.now().year
-        historical_start = f"{current_year-1}-01-15"
-        historical_end = f"{current_year-1}-01-21"
-        
-        historical_data = weather_service.get_nasa_historical_data(
-            coords['latitude'], 
-            coords['longitude'], 
-            historical_start, 
-            historical_end
-        )
-        
-        # Step 4: Process the data
+        # Step 3: Get historical NASA data for comparison across multiple years
+        # Anchor the window to the requested date (or today) and collect last N years for the same month/day window
+        anchor = None
+        if requested_date:
+            try:
+                anchor = datetime.strptime(requested_date, '%Y-%m-%d')
+            except ValueError:
+                anchor = datetime.now()
+        else:
+            anchor = datetime.now()
+
+        # 7-day window starting at anchor's month/day
+        window_length_days = 7
+        month = anchor.month
+        day = anchor.day
+
+        years_back = 10  # include roughly last decade
+        historical_all = []
+
+        for i in range(1, years_back + 1):
+            year = anchor.year - i
+            try:
+                start_dt = datetime(year, month, day)
+            except ValueError:
+                # Handle cases like Feb 29 on non-leap years by rolling to Feb 28
+                if month == 2 and day == 29:
+                    start_dt = datetime(year, 2, 28)
+                else:
+                    # Fallback to first of month
+                    start_dt = datetime(year, month, 1)
+            end_dt = start_dt + timedelta(days=window_length_days - 1)
+
+            hist = weather_service.get_nasa_historical_data(
+                coords['latitude'],
+                coords['longitude'],
+                start_dt.strftime('%Y-%m-%d'),
+                end_dt.strftime('%Y-%m-%d')
+            )
+            if hist:
+                processed = weather_service.process_weather_data(hist)
+                if processed:
+                    historical_all.extend(processed)
+
+        # Step 4: Process the live data
         live_processed = weather_service.process_live_weather_data(live_data)
-        historical_processed = weather_service.process_weather_data(historical_data) if historical_data else None
+        historical_processed = historical_all if historical_all else None
         
         # Step 5: Generate insights
         insights = weather_service.compare_with_historical(live_processed, historical_processed) if historical_processed else []
