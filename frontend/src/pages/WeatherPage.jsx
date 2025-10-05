@@ -6,109 +6,127 @@ import Suggestion from '../components/Suggestion'
 
 const WeatherPage = () => {
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-[#52C7E8] to-[#96D9EC] pt-12 pb-8">
-        <div className="h-full w-full flex flex-col justify-center items-center">
-            {/* Mobile Location - Hidden on desktop */}
-            <div className="container px-5 w-11/12 h-44 bg-sh-white  mb-8 rounded-3xl md:hidden">
-                <Location />
-            </div>
-
-            {/* Main Container */}
-            <div className="container flex flex-col md:flex-row justify-center rounded-3xl md:rounded-4xl items-start gap-6 w-11/12 max-w-6xl bg-sh-white p-6">
-                
-                {/* Left Section - 60% width on desktop */}
-                <div className="w-full md:w-[60%] flex flex-col gap-6">
-                    
-                    {/* Top Row - Location and Best Day */}
-                    <div className="flex justify-center flex-col md:flex-row gap-3">
-                        {/* Location - Desktop only */}
-                        <div className="hidden md:block md:w-1/2">
-                            <Location />
-                        </div>
-                        
-                        {/* Best Day */}
-                        <div className="w-full md:w-1/2">
-                            <BestDay />
-                        </div>
-                    </div>
-
-                    {/* Today's Highlights Section */}
-                    <div className="w-full bg-l-white shadow-[0_0_4px_2px_rgba(0,0,0,0.1)] rounded-3xl p-6">
-                        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Today's Highlights</h2>
-                        
-                        <div className="flex flex-col md:flex-row gap-6">
-                            {/* UV Index and Humidity Card */}
-                            <div className="w-full md:w-1/2 bg-gray-50 rounded-2xl p-6">
-                                {/* UV Index */}
-                                <div className="mb-6">
-                                    <p className="text-sm text-gray-600 mb-3">UV Index</p>
-                                    <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-600 via-yellow-400 via-orange-500 via-red-600 to-pink-600"></div>
-                                </div>
-                                
-                                {/* Humidity */}
-                                <div>
-                                    <p className="text-sm text-gray-600 mb-2">Humidity</p>
-                                    <p className="text-2xl font-semibold text-gray-900 mb-3">65%</p>
-                                    <div className="w-full h-2 rounded-full bg-gray-300">
-                                        <div className="w-[65%] h-full bg-blue-400 rounded-full"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Weather Data Grid */}
-                            <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-                                {/* Wind Speed */}
-                                <div className="bg-m-white rounded-2xl p-4 flex flex-col justify-center items-center">
-                                    <p className="text-xs text-gray-600 mb-2">Wind speed</p>
-                                    <p className="text-2xl font-semibold text-gray-900">5 km/h</p>
-                                </div>
-
-                                {/* Precipitation Probability */}
-                                <div className="bg-m-white rounded-2xl p-4 flex flex-col justify-center items-center">
-                                    <p className="text-xs text-gray-600 mb-2 text-center">Precipitation Probability</p>
-                                    <p className="text-2xl font-semibold text-gray-900">Val</p>
-                                </div>
-
-                                {/* AQI */}
-                                <div className="bg-m-white rounded-2xl p-4 flex flex-col justify-center items-center">
-                                    <p className="text-xs text-gray-600 mb-2">AQI</p>
-                                    <p className="text-2xl font-semibold text-gray-900">Val</p>
-                                </div>
-
-                                {/* Precipitation Amount */}
-                                <div className="bg-m-white rounded-2xl p-4 flex flex-col justify-center items-center">
-                                    <p className="text-xs text-gray-600 mb-2 text-center">Precipitation Amount</p>
-                                    <p className="text-2xl font-semibold text-gray-900">Val</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Show More Button - Mobile Only */}
-                        <button className="md:hidden mt-6 w-full py-3 px-6 text-gray-700 font-medium bg-gray-100 rounded-full hover:bg-gray-200 transition">
-                            Show more
-                        </button>
-                    </div>
+    <div className="w-full min-h-screen bg-gradient-to-b from-[#52C7E8] to-[#96D9EC] py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Mobile Layout */}
+        <div className="md:hidden space-y-4">
+          {/* Location Card - Mobile */}
+          <Location />
+          
+          {/* Best Day Card - Mobile */}
+          <BestDay />
+          
+          {/* Today's Highlights - Mobile */}
+          <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Today's Highlights</h2>
+            
+            {/* UV Index and Humidity */}
+            <div className="bg-white/50 rounded-2xl p-5 mb-4">
+              {/* UV Index */}
+              <div className="mb-6">
+                <p className="text-sm text-gray-700 mb-2">UV Index</p>
+                <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-500 via-yellow-400 via-orange-500 via-red-500 to-pink-600"></div>
+              </div>
+              
+              {/* Humidity */}
+              <div>
+                <p className="text-sm text-gray-700 mb-2">Humidity</p>
+                <p className="text-2xl font-semibold text-gray-900 mb-2">65%</p>
+                <div className="w-full h-2 rounded-full bg-gray-300">
+                  <div className="w-[65%] h-full bg-blue-500 rounded-full"></div>
                 </div>
-
-                {/* Right Section - 40% width on desktop */}
-                <div className="w-full md:w-[40%] flex flex-col items-center gap-4">
-                    
-                    {/* Chance of Rain */}
-                    <div className="w-full flex justify-center items-center h-1/2">
-                        <ChanceOfRain />
-                    </div>
-                    <div className="w-full flex justify-center items-center h-1/2">
-                        <Suggestion />
-                    </div>
-
-                </div>
+              </div>
             </div>
-
-            {/* View Past 7 Days Button */}
-            <button className="my-6 py-3 px-10 h-14 font-medium text-gray-900 rounded-full bg-white hover:bg-gray-50 transition shadow-sm">
-                View past 7 days
+            
+            {/* Show More Button */}
+            <button className="w-full py-3 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition">
+              Show more
             </button>
+          </div>
         </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:block">
+          <div className="bg-white/70 backdrop-blur-sm rounded-[40px] p-8">
+            <div className="flex gap-6">
+              {/* Left Section - 60% */}
+              <div className="w-[60%] space-y-4">
+                {/* Top Row - Location and Best Day */}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <Location />
+                  </div>
+                  <div className="w-1/2">
+                    <BestDay />
+                  </div>
+                </div>
+                
+                {/* Today's Highlights */}
+                <div className="bg-white/60 rounded-3xl p-6">
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-6">Today's Highlights</h2>
+                  
+                  <div className="flex gap-6">
+                    {/* Left - UV Index and Humidity */}
+                    <div className="w-1/2 bg-white/50 rounded-2xl p-6">
+                      {/* UV Index */}
+                      <div className="mb-6">
+                        <p className="text-sm text-gray-700 mb-3">UV Index</p>
+                        <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-500 via-yellow-400 via-orange-500 via-red-500 to-pink-600"></div>
+                      </div>
+                      
+                      {/* Humidity */}
+                      <div>
+                        <p className="text-sm text-gray-700 mb-2">Humidity</p>
+                        <p className="text-2xl font-semibold text-gray-900 mb-3">65%</p>
+                        <div className="w-full h-2 rounded-full bg-gray-300">
+                          <div className="w-[65%] h-full bg-blue-500 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Right - Grid of 4 items */}
+                    <div className="w-1/2 grid grid-cols-2 gap-4">
+                      {/* Wind Speed */}
+                      <div className="bg-white/50 rounded-2xl p-4 flex flex-col items-center justify-center">
+                        <p className="text-xs text-gray-600 mb-2">Wind speed</p>
+                        <p className="text-2xl font-semibold text-gray-900">5 km/h</p>
+                      </div>
+                      
+                      {/* Precipitation Probability */}
+                      <div className="bg-white/50 rounded-2xl p-4 flex flex-col items-center justify-center">
+                        <p className="text-xs text-gray-600 mb-2 text-center">Precipitation Probability</p>
+                        <p className="text-2xl font-semibold text-gray-900">Val</p>
+                      </div>
+                      
+                      {/* AQI */}
+                      <div className="bg-white/50 rounded-2xl p-4 flex flex-col items-center justify-center">
+                        <p className="text-xs text-gray-600 mb-2">AQI</p>
+                        <p className="text-2xl font-semibold text-gray-900">Val</p>
+                      </div>
+                      
+                      {/* Precipitation Amount */}
+                      <div className="bg-white/50 rounded-2xl p-4 flex flex-col items-center justify-center">
+                        <p className="text-xs text-gray-600 mb-2 text-center">Precipitation Amount</p>
+                        <p className="text-2xl font-semibold text-gray-900">Val</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right Section - 40% */}
+              <div className="w-[40%] flex flex-col gap-4">
+                <div className="flex-1">
+                  <ChanceOfRain />
+                </div>
+                <div className="flex-1">
+                  <Suggestion />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

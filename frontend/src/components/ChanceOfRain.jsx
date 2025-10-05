@@ -1,46 +1,53 @@
-import React from 'react';
+import React from 'react'
 
-export default function ChanceOfRain() {
-  // Fixed time periods from the image
-  const rainData = [85, 45, 20, 15, 15, 18, 18, 18];
-  const timePeriods = ['03 am', '06 am', '09 am', '12 pm', '03 pm', '06 pm', '09 pm', '12 am'];
-  
+const ChanceOfRain = () => {
+  // This data will come from backend
+  const rainData = [85, 45, 20, 15, 15, 18, 18, 18]
+  const timePeriods = ['03 am', '06 am', '09 am', '12 pm', '03 pm', '06 pm', '09 pm', '12 am']
+ 
   return (
-    <div className="bg-l-white shadow-[0_0_4px_2px_rgba(0,0,0,0.1)] backdrop-blur-sm rounded-3xl py-6 px-8 max-w-sm h-full w-full">
-    <h2 className="text-lg font-semibold text-gray-800 mb-4 text-left">
+    <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-6 h-full flex flex-col">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">
         Chance of Rain
-    </h2>
-    
-    {rainData && rainData.length > 0 ? (
-        <>
-            <div className="space-y-2">
-                {timePeriods.map((time, index) => (
-                <div key={index} className="flex items-center gap-3">
-                    <span className="text-gray-700 font-medium w-12 text-[14px]">
-                    {time}
-                    </span>
-                    
-                    <div className="flex-1 bg-gray-300 rounded-full h-1 relative overflow-hidden">
+      </h2>
+   
+      {rainData && rainData.length > 0 ? (
+        <div className="flex-1 flex flex-col">
+          <div className="space-y-2 flex-1">
+            {timePeriods.map((time, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <span className="text-gray-700 font-medium w-14 text-xs">
+                  {time}
+                </span>
+               
+                <div className="flex-1 flex items-center">
+                  <div className="flex-1 bg-gray-300 rounded-full h-1.5 relative overflow-hidden">
                     <div
-                        className="bg-blue-500 h-1 rounded-full transition-all duration-700 ease-out"
-                        style={{ width: `${rainData[index] || 0}%` }}
+                      className="bg-blue-500 h-1.5 rounded-full transition-all duration-700"
+                      style={{ width: `${rainData[index] || 0}%` }}
                     />
-                    </div>
+                  </div>
                 </div>
-                ))}
+              </div>
+            ))}
+          </div>
+         
+          <div className="flex justify-start">
+            <div className="w-[20%]"></div>
+            <div className="flex w-[80%] justify-between mt-3 text-xs text-gray-600">
+                <span>Sunny</span>
+                <span>Rainy</span>
+                <span>Heavy Rain</span>
             </div>
-            
-            <div className="flex justify-between mt-4 text-xs text-gray-600 font-normal">
-                <span className="text-left flex-1">Sunny</span>
-                <span className="text-center flex-1">Rainy</span>
-                <span className="text-right flex-1">Heavy Rain</span>
-            </div>
-        </>
-    ) : (
-        <div className="text-center text-gray-600 py-6 text-sm">
-        No data available
+          </div>
         </div>
-    )}
+      ) : (
+        <div className="text-center text-gray-600 py-6 text-sm">
+          No data available
+        </div>
+      )}
     </div>
-  );
+  )
 }
+
+export default ChanceOfRain
