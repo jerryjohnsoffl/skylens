@@ -603,6 +603,10 @@ def get_enhanced_weather():
             'live_forecast': live_processed,
             'historical_data': historical_processed,
             'insights': insights,
+            # Surface timezone information from the live weather provider so clients can format local time
+            'timezone': live_data.get('timezone'),
+            'timezone_abbreviation': live_data.get('timezone_abbreviation'),
+            'utc_offset_seconds': live_data.get('utc_offset_seconds'),
             'data_sources': {
                 'live_weather': 'Open-Meteo',
                 'historical_climate': 'NASA POWER (MERRA-2)'

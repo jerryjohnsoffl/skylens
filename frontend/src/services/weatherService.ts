@@ -140,6 +140,7 @@ export const fetchWeather = async (location: string, date?: string): Promise<Wea
     city: cityName,
     location: cityName,
     country,
+    timeZone: (data && (data.timezone || data.timezone_abbreviation)) || undefined,
     temperature: Math.round(todayTempAvg),
     condition: todayCondition,
     humidity: todayHumidity,
