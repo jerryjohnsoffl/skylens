@@ -39,6 +39,13 @@ function App() {
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() =>
+  {
+    const fetchData= async () =>{
+      const url="https://skylens-2.onrender.com"
+    }
+
+  })
   const localNowString = (() => {
     const tz = weather?.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
     try {

@@ -7,5 +7,10 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  base:'/skylens'
+  base:'/skylens',
+  server: {
+    port: 5173,
+  },
 });
+
+
